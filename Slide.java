@@ -1,51 +1,103 @@
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
-public class Slide{
-
-	int id;
-	private String storyText;
-	private static int total_ID_Numbers = 0;
-
-	public Slide(){		// Constructor
-
-		id = total_ID_Numbers += 1;  // total_ID_Numbers is independent of the object. This object will not know that other objects were made until it checks this variable. The root should always be 1. 
-		inputTxt();
-
+public class Slide {
+	static int MAX_CHOICES = 4;
+	String slideTitle;
+	String slideText;
+	int numberOfChoices;
+	Choice[] slideChoice;
+	
+	public Slide(String title, String text) {
+		slideTitle = title;	
+		slideText = text;
+		slideChoice = new Choice[MAX_CHOICES];
+		numberOfChoices = 0;
+		for (int i = 0; i < MAX_CHOICES; i++){
+			slideChoice[i] = new Choice("", null);
+		}
 	}
-
+	
+	public void setTitle(String title){
+		slideTitle = title;
+	}
+	
+	public String getTitle(){
+		return slideTitle;
+	}
+	
+	public void setText(String text){
+		slideText = text;
+	}
+	
 	public String getText(){
-	
-		return storyText;
-	
+		return slideText;
 	}
 	
-	public int getId(int x){
-	
-		return id;
-	
+	public void addChoice(String text, Slide nextSlide){
+		if (numberOfChoices < MAX_CHOICES){
+			slideChoice[numberOfChoices] = new Choice(text, nextSlide);
+			numberOfChoices ++;
+		}
 	}
 	
-	public void setText(String storyText){
-	
-		this.storyText = storyText;
-	
+	public void deleteChoice(int choiceNumber){
+		slideChoice[choiceNumber].setText("");
+		slideChoice[choiceNumber].setNextSlide(null);
+		numberOfChoices --;
+		for (int i = choiceNumber; i < numberOfChoices - 1; i ++){
+			slideChoice [i] = slideChoice[i + 1];
+		}
+		slideChoice[numberOfChoices].setText("");
+		slideChoice[numberOfChoices].setNextSlide(null);
 	}
 	
-	public void inputTxt(){
+	private String[] getChoiceTexts(){
+		String [] choiceText = new String[numberOfChoices];
+		for (int i = 0; i < numberOfChoices; i ++){
+			choiceText[i] = slideChoice[i].getText();
+		}
+		return choiceText;
+	}
 	
-		Scanner userInput = new Scanner(System.in);
 	
-		System.out.println("Enter the text you'd like to enter for this slide.");
-		String input = userInput.nextLine();
+	//using code from http://www.java2s.com/Tutorial/Java/
+	//	0240__Swing/Todisplaysadialogwithalistofchoicesinadropdownlistbox.htm
+	public void displaySlide(String[] choices){
+		String text = getText();
+		String title = getTitle();
+		String[] choiceTexts = getChoiceTexts();
 		
-		storyText = input;
+		
+		String input = (String) JOptionPane.showInputDialog(null, text, title, 
+				JOptionPane.QUESTION_MESSAGE, null, choiceTexts, choiceTexts[0]);
+		System.out.println(input);
+	}
+	
+	private class Choice {
+		String choiceText;
+		Slide choiceNextSlide;
+		
+		public Choice (String text, Slide nextSlide){
+			choiceText = text;
+			choiceNextSlide = nextSlide;
+		}
+		
+		public void setText(String text){
+			choiceText = text;
+		}
+		
+		public String getText(){
+			return choiceText;
+		}
+
+		public void setNextSlide(Slide slide){
+			choiceNextSlide = slide;
+		}
+		
+		public Slide getNextSlide(){
+			return choiceNextSlide;
+		}
 		
 	}
 	
 }
-
-
-
-/* The Driver.java file will be the "gui" from where people will choose from a menu to build a new story slide.
-When
-*/
