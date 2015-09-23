@@ -10,7 +10,7 @@ public class PathButton extends JPanel implements GUIInterface {
 	
 	private JLabel label;//label is what gets changed depending on which button
 	
-	//just some sample options for time being
+	
 	
 	private String pathA="Go into the woods";
 	private String pathB="Dont go into woods";
