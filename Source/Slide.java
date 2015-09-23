@@ -11,7 +11,7 @@ Contributors: Jake L.
 About: Will eventually be the primary Slide class utilized for our story-maker. 
  */
 
-public class Slide {
+public class Slide implements Serializable {
 
 	static int MAX_CHOICES = 4;
 	private int id; // -JL: Added id value to object
