@@ -1,0 +1,1 @@
+This Folder will contain our assets, for example any icons, backround images, videos, music.
