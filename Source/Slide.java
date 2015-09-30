@@ -64,13 +64,11 @@ public class Slide implements Serializable {
 		}
 	}
 	
-	public void addChoice(String text, Slide nextSlide){  // -JL Commented out for the time-being while testing with the Slide class itself and not presently worrying about choices just yet.
-		if (numberOfChoices < MAX_CHOICES){
-			nextSlide.setChoiceTxt(text);
-			choices.add(nextSlide);
-			numberOfChoices++;
-		}
-		else{System.out.println("No more choices.");}
+	public void addChoice(String text, Slide nextSlide)
+	{  // -JL Commented out for the time-being while testing with the Slide class itself and not presently worrying about choices just yet.
+		nextSlide.setChoiceTxt(text);
+		choices.add(nextSlide);
+		numberOfChoices++;
 	}
 	
 	//removes a choice and shifts choices further up in the array down.

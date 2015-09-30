@@ -14,7 +14,7 @@ import javax.imageio.*;
 import java.awt.image.*;
 import java.io.*;
 
-public class MenuPanel extends JPanel implements GUIInterface
+public class MenuWindow extends JPanel implements GUIInterface
 {
     private JButton playGame;
 	private JButton buildGame;
@@ -31,7 +31,7 @@ public class MenuPanel extends JPanel implements GUIInterface
 	private int width;
 	private int height;
 	
-    public MenuPanel(JFrame incMenuFrame)// constructer
+    public MenuWindow(JFrame incMenuFrame)// constructer
     {
 		menuFrame = incMenuFrame;
 		
@@ -133,7 +133,7 @@ public class MenuPanel extends JPanel implements GUIInterface
 		about = new JButton("About");
 		buttonPanel = new JPanel();
 		mainPanel = new JPanel();
-		menuBackround = null;		
+		menuBackround = null;
 		
 	}
 
@@ -164,8 +164,8 @@ public class MenuPanel extends JPanel implements GUIInterface
 	**/
 	private class ButtonListener implements ActionListener
 	{
-		private MenuPanel MainMenu;
-		ButtonListener(MenuPanel thisMenu)
+		private MenuWindow MainMenu;
+		ButtonListener(MenuWindow thisMenu)
 		{
 			MainMenu = thisMenu;
 		}
@@ -180,19 +180,14 @@ public class MenuPanel extends JPanel implements GUIInterface
 			{
 				// will need to have a load game popup or new window
 				menuFrame.dispose();
-				JFrame gameFrame = new JFrame("'Name' Game");
-				gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-				GamePanel panel = new GamePanel(gameFrame);  
-				gameFrame.pack();
-				gameFrame.setVisible(true);
+				GameWindow game = new GameWindow();
 				
 			}else if(command.equals( "Build Game"))
 			{
 				JFrame buildFrame = new JFrame("Build");
 				buildFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-				BuildPanel panel = new BuildPanel(buildFrame, MainMenu);
+				BuildWindow panel = new BuildWindow(buildFrame, MainMenu);
 				buildFrame.pack();
 			}else if(command.equals( "Exit To Desktop"))
 			{

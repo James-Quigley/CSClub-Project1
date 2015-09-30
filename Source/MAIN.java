@@ -28,7 +28,7 @@ public class MAIN
 		JFrame menuFrame = new JFrame("Main Menu");
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		MenuPanel panel = new MenuPanel(menuFrame); 
+		MenuWindow panel = new MenuWindow(menuFrame); 
 		menuFrame.pack();
 		menuFrame.setVisible(true);
 	}
