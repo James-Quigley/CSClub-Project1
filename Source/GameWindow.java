@@ -2,23 +2,15 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class PathButton extends JPanel implements GUIInterface {
-	
-	
-	
-	
+public class GameWindow extends JPanel implements GUIInterface {
 	
 	private JLabel label;//label is what gets changed depending on which button
-	
-	
-	
 	private String pathA="Go into the woods";
 	private String pathB="Dont go into woods";
 	private String pathC="Ask locals about the woods";
 	private String pathD="Run Away";
 	
-	
-	
+	private JFrame gameFrame;
 	
 	private JButton pathA_Button;
 	private JButton pathB_Button;
@@ -27,27 +19,24 @@ public class PathButton extends JPanel implements GUIInterface {
 	
 	private JPanel buttonPanel;
 	
+	private int Swidth;
+	private int Sheight;
+	
 	private ButtonListener listener;
 	
-	public PathButton(){
-		
+	public GameWindow()
+	{
 		createComponents();//creates buttons,panel, and listener
 		
 		buildComponents();//associates listener with each button
 		
-		addElements();//adds the buttons 
+		addActionListeners();
 		
+		addElements();//adds the buttons
 		
-		buttonPanel.setPreferredSize(new Dimension(600,40));//sets panel size
-		buttonPanel.setBackground(Color.black);//sets color of panel
+		gameFrame.pack();
 		
-		
-		
-		
-		setBackground(Color.lightGray);//sets frame background
-		setPreferredSize(new Dimension(1000,500));// parameter must a be a dimension object
-		
-		
+		gameFrame.setVisible(true);
 	}
 	
 	public void addElements(){
@@ -57,22 +46,27 @@ public class PathButton extends JPanel implements GUIInterface {
 		buttonPanel.add(pathC_Button);
 		buttonPanel.add(pathD_Button);
 		
-		add(label);
-		add(buttonPanel);//adds the panel of buttons to the frame
+		gameFrame.add(label);
+		gameFrame.add(buttonPanel);//adds the panel of buttons to the frame
+		
 	}
 	
-	public void buildComponents(){
-		pathA_Button.addActionListener(listener);
+	public void buildComponents()
+	{
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();// geting size of screen
+		Swidth = gd.getDisplayMode().getWidth();
+		Sheight = gd.getDisplayMode().getHeight();
 		
-		pathB_Button.addActionListener(listener);
+		buttonPanel.setPreferredSize(new Dimension(600,40));//sets panel size
+		buttonPanel.setBackground(Color.black);//sets color of panel
 		
-		pathC_Button.addActionListener(listener);
-		
-		pathD_Button.addActionListener(listener);
+		gameFrame.setBackground(Color.lightGray);//sets frame background
+		gameFrame.setPreferredSize(new Dimension(Swidth/2,Sheight/2));// parameter must a be a dimension object
 	}
 	
 	public void createComponents(){
-	
+		gameFrame = new JFrame();
+		
 		listener=new ButtonListener();
 		
 		buttonPanel=new JPanel();
@@ -88,16 +82,22 @@ public class PathButton extends JPanel implements GUIInterface {
 		pathD_Button=new JButton(pathD);
 	}
 	
+	private void addActionListeners()
+	{
+		pathA_Button.addActionListener(listener);
+		
+		pathB_Button.addActionListener(listener);
+		
+		pathC_Button.addActionListener(listener);
+		
+		pathD_Button.addActionListener(listener);
+	}
+	
 	private class ButtonListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent event){//The event is when a mouse is clicked
-			
 			if(event.getSource() == pathA_Button ){
 				label.setText("pathA has been pressed");
-				
-				
-				
-				
 			}
 			else if(event.getSource() == pathB_Button){
 				label.setText("pathB has been pressed");
@@ -113,25 +113,5 @@ public class PathButton extends JPanel implements GUIInterface {
 				label.setText("Error");
 			}	
 		}
-	}
-	
-	
-	
-	
-	
-	
+	}	
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-

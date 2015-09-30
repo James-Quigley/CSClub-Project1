@@ -31,38 +31,9 @@ public class SlideGame{
 		System.out.println("4 - Quit");
 	}
 	
-	public static void menuChoice(){
-
-	Scanner userInput = new Scanner(System.in); 
-	
-		// JL: Capture User-Input for menu choice.
-	
-	System.out.println("\nEnter the appropriate menu option: ");
-	int input = userInput.nextInt();
-	
-	switch(input){
-
-		case 1: slideList.add(new Slide());
-				System.out.println("\nNew Slide Created.\n" + slideList.size()); // JL: For testing purposes, print the size of the ArrayList after each subsequent newly-card made. 
-				break;
-
-		case 2: System.out.println("To Edit Menu");
-				selectSlide();
-				editMenuChoice();
-				break;
-
-		case 3: System.out.println("To Read A Slide");
-				System.out.println("Which slide?");
-				int id = userInput.nextInt();
-				Slide slide = slideList.get(id);
-				readSlide(slide);
-				break;
-				
-		case 4: System.out.println("\nQuitting...");
-				System.exit(0);
-				break; // JL: necessary since System.exit(0) precedes it? Check.
-				
-		default:System.out.println("Unknown Problem. Enter again.");
+	public static void menuChoice()
+	{
+		
 	}
 }
 
