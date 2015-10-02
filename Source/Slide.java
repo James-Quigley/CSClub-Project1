@@ -11,22 +11,27 @@ Contributors: Jake L.
 About: Will eventually be the primary Slide class utilized for our story-maker. 
  */
 
-public class Slide implements Serializable {
+public class Slide implements Serializable  {
 
-	static int MAX_CHOICES = 4;
 	private int id; // -JL: Added id value to object
 	private static int total_ID_Numbers; //-JL: Added static id number tracker
-	String slideTitle;
-	String slideText;
-	String choiceTitle; // -JL: Will need to fix this, as it means anywhere this Slide is the choice result, it must be the same choice description. Which means you cannot have difference choice descriptions point to the same slide at the moment. 
-	int numberOfChoices;
-	private ArrayList<Slide> choices = new ArrayList<Slide>(); //-JL: Choices (references to other slides) stored here
+	private String slideTitle;
+	private String slideText;
+	private String m_ChoiceText[];
+	private Slide m_NextSlides[];
+	private int m_SlideCount;
 	
-	public Slide(){
+	public Slide()
+	{
 		slideTitle = "";
 		slideText = "";
-		choiceTitle = "";
-		numberOfChoices = 0;
+		m_ChoiceText = new String[4];
+		m_NextSlides = new Slide[4];
+		for(int i = 0; i < 4; i++)
+		{
+			m_ChoiceText[i] = "";
+			m_NextSlides[i] = null;
+		}
 	}
 	
 	public void setTitle(String title){
@@ -49,41 +54,27 @@ public class Slide implements Serializable {
 	public int getID(){
 		return id;
 	}
-
-	public void setChoiceTxt(String txt){
-		choiceTitle = txt;
-	}
-	public Slide getChoice(int index){
-		return choices.get(index);
-	}
 	
-	public void displayChoices(){
-	
-		for(Slide choice : choices){
-			System.out.println(choices.indexOf(choice) + " - " + choice.getChoiceText());
-		}
+	public void setNextChoice(Slide nextSlide, String text, int index)
+	{
+		m_NextSlides[index] = nextSlide;
+		m_ChoiceText[index] = text;
 	}
 	
-	public void addChoice(String text, Slide nextSlide)
-	{  // -JL Commented out for the time-being while testing with the Slide class itself and not presently worrying about choices just yet.
-		nextSlide.setChoiceTxt(text);
-		choices.add(nextSlide);
-		numberOfChoices++;
+	public Slide getChoiceAtIndex(int index)
+	{
+		return m_NextSlides[index];
 	}
 	
-	//removes a choice and shifts choices further up in the array down.
-	//deletes the last element in the array.
-	
-	public void deleteChoice(int choiceNumber){
-
+	public String getChoiceTitleAtIndex(int index)
+	{
+		return m_NextSlides[index].getTitle();
 	}
 	
-	//this is a private function for displaySlide
-	private String getChoiceText(){
-	
-		return choiceTitle;
+	public String getChoiceTextAtIndex(int index)
+	{
+		return m_ChoiceText[index];
 	}
-	
 	/*
 	private class Choice {
 		String choiceText;
