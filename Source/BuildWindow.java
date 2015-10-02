@@ -2,11 +2,12 @@
 Name: Build Panel 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/17/15
+Updated On: 10/1/15
 Contributors:
  */
 import java.awt.event.*; 
 import javax.swing.*;
+import javax.swing.text.*;
 import javax.swing.JFrame;
 import java.io.*;
 import java.util.*; 
@@ -19,6 +20,7 @@ public class BuildWindow extends JPanel implements GUIInterface
 	private JButton saveSlide, LoadSlide, backToMMenu;
 	private JButton answer1B, answer2B, answer3B, answer4B;
 	private JComboBox<String> createdSlides, createdGames;
+	private JComboBox<String> createdSlidesAnswer1, createdSlidesAnswer2, createdSlidesAnswer3, createdSlidesAnswer4;
 	private JFrame buildFrame, buildMenu;
 	private MenuWindow MainMenu;
 	private JPanel mainPanel, loadPanel;
@@ -37,6 +39,8 @@ public class BuildWindow extends JPanel implements GUIInterface
 	
     public BuildWindow(JFrame incBuildFrame, MenuWindow oldMMenu)// constructer
     {
+		currentGame = new Game();
+		currentSlide = new Slide();
 		MainMenu = oldMMenu;
 		buildFrame = incBuildFrame;
 		
@@ -60,27 +64,40 @@ public class BuildWindow extends JPanel implements GUIInterface
 	{
 		body.add(storyText);
 		
-		
 		headers.add(createGame);
-		headers.add(saveSlide);
 		headers.add(exitToDesk);
 		headers.add(exitToMenu);
 		
+		options.add(new JLabel("Select which slide to edit."));
 		options.add(createdSlides);
+		options.add(new JLabel(" "));
+		options.add(new JLabel(" "));
+		options.add(saveSlide);
+		options.add(new JLabel(" "));
+		options.add(new JLabel(" "));
 		options.add(createNewSlide);
-		options.add(LoadSlide);
+		options.add(new JLabel(" "));
+		options.add(new JLabel(" "));
+		//options.add(LoadSlide);
 		
 		answers.add(answer1Text);
-		answers.add(answer1B);
+		answers.add(new JLabel("Set Next Path Location For Answer One:"));
+		answers.add(createdSlidesAnswer1);
 		answers.add(answer1Loc);
+		
 		answers.add(answer2Text);
-		answers.add(answer2B);
+		answers.add(new JLabel("Set Next Path Location For Answer Two:"));
+		answers.add(createdSlidesAnswer2);
 		answers.add(answer2Loc);
+		
 		answers.add(answer3Text);
-		answers.add(answer3B);
+		answers.add(new JLabel("Set Next Path Location For Answer Two:"));
+		answers.add(createdSlidesAnswer3);
 		answers.add(answer3Loc);
+		
 		answers.add(answer4Text);
-		answers.add(answer4B);
+		answers.add(new JLabel("Set Next Path Location For Answer Four:"));
+		answers.add(createdSlidesAnswer4);
 		answers.add(answer4Loc);
 		
 		buildFrame.add(body,BorderLayout.CENTER);
@@ -111,7 +128,7 @@ public class BuildWindow extends JPanel implements GUIInterface
 		
 		headers.setLayout(new FlowLayout());
 		
-		answers.setLayout(new GridLayout(4, 2, 5, 5));
+		answers.setLayout(new GridLayout(5, 2, 5, 5));
 		
 		body.setSize(SCREEN_WIDTH-500,SCREEN_HEIGHT-500);
 		answers.setPreferredSize(new Dimension(SCREEN_WIDTH/2, SCREEN_HEIGHT/6));
@@ -136,6 +153,7 @@ public class BuildWindow extends JPanel implements GUIInterface
 		createdSlides.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/35));
 		createNewSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		LoadSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
+		saveSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		createGame.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		
 		buildMenu.setResizable(false);
@@ -167,6 +185,12 @@ public class BuildWindow extends JPanel implements GUIInterface
 		buildMenu.getRootPane().setWindowDecorationStyle(JRootPane.FILE_CHOOSER_DIALOG );
 		buildMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		createdSlidesAnswer1.setActionCommand("A1");
+		createdSlidesAnswer2.setActionCommand("A2");
+		createdSlidesAnswer3.setActionCommand("A3");
+		createdSlidesAnswer4.setActionCommand("A4");
+		
+		createdSlides.addItem("Select One");
 	}
 	
 	/**createComponents
@@ -176,7 +200,8 @@ public class BuildWindow extends JPanel implements GUIInterface
 	**/
 	public void createComponents()
 	{
-		String [] Games = {"Game One", "Game Two", "Game Three"};// need to load saved game names here...
+		//need to load saved game titles here, put into an array and added to the ComboBoxes...
+		//Need to load Game slides titles here, put into an array and added to the ComboBoxes...
 		
 		mainPanel = new JPanel();
 		options = new JPanel();
@@ -184,33 +209,49 @@ public class BuildWindow extends JPanel implements GUIInterface
 		headers = new JPanel();
 		answers = new JPanel();
 		
-		storyText = new JTextField("Place Holder... Work in Progress");
-		answer1Text = new JTextField("Place Holder...1");
-		answer2Text = new JTextField("Place Holder...2");
-		answer3Text = new JTextField("Place Holder...3");
-		answer4Text = new JTextField("Place Holder...4");
+		if(currentSlide.getChoiceTextAtIndex(1) != null)
+		{
+			storyText = new JTextField(currentSlide.getText());
+			answer1Text = new JTextField(currentSlide.getChoiceTextAtIndex(0));
+			answer2Text = new JTextField(currentSlide.getChoiceTextAtIndex(1));
+			answer3Text = new JTextField(currentSlide.getChoiceTextAtIndex(2));
+			answer4Text = new JTextField(currentSlide.getChoiceTextAtIndex(3));
+		}else
+		{
+			storyText = new JTextField();
+			answer1Text = new JTextField();
+			answer2Text = new JTextField();
+			answer3Text = new JTextField();
+			answer4Text = new JTextField();
+		}
+
 		
 		answer1B = new JButton("Set Event Location For Answer One");
 		answer2B = new JButton("Set Event Location For Answer Two");
 		answer3B = new JButton("Set Event Location For Answer Three");
 		answer4B = new JButton("Set Event Location For Answer Four");
 		
-		answer1Loc = new JTextField("Current Loaction: ");
-		answer2Loc = new JTextField("Current Loaction:");
-		answer3Loc = new JTextField("Current Loaction:");
-		answer4Loc = new JTextField("Current Loaction:");
+		answer1Loc = new JTextField("Current Location: ");
+		answer2Loc = new JTextField("Current Location: ");
+		answer3Loc = new JTextField("Current Location: ");
+		answer4Loc = new JTextField("Current Location: ");
+		
+		createdSlidesAnswer1 = new JComboBox<String>();// inset game slide's titles here
+		createdSlidesAnswer2 = new JComboBox<String>();// inset game slide's titles here
+		createdSlidesAnswer3 = new JComboBox<String>();// inset game slide's titles here
+		createdSlidesAnswer4 = new JComboBox<String>();// inset game slide's titles here
 		
 		createGame = new JButton("Create Game");
 		saveSlide = new JButton("Save Slide");
 		exitToDesk = new JButton("Exit To Desktop");
 		exitToMenu = new JButton("Exit To Menu");
 		
-		createdSlides = new JComboBox<String>();
+		createdSlides = new JComboBox<String>();// inset game slide's titles here
 		LoadSlide = new JButton("Load Slide");
 		createNewSlide = new JButton("Create New Slide");
 		
 		createNewBuild = new JButton("Create New Game");
-		createdGames = new JComboBox<String>(Games);
+		createdGames = new JComboBox<String>();//insert game title array here
 		backToMMenu = new JButton("Back To Main Menu");
 		Message = new JLabel("Load an Existing Game or Create a New One");
 		
@@ -220,6 +261,34 @@ public class BuildWindow extends JPanel implements GUIInterface
 		CreatePanel = new JPanel(new FlowLayout());
 		MenuPanel = new JPanel();
 		buildMenu = new JFrame("Build Game Menu");
+	}
+
+	/**updateComponents
+	* will update all components to there
+	* current values
+	* J.B.
+	**/
+	private void updateComponents()
+	{
+		storyText.setText(currentSlide.getText());
+		answer1Text.setText(currentSlide.getChoiceTextAtIndex(0));
+		answer2Text.setText(currentSlide.getChoiceTextAtIndex(1));
+		answer3Text.setText(currentSlide.getChoiceTextAtIndex(2));
+		answer4Text.setText(currentSlide.getChoiceTextAtIndex(3));
+		
+		if(currentSlide.getChoiceAtIndex(0) != null)
+		{
+			answer1Loc.setText("Current Loaction: " + currentSlide.getChoiceTitleAtIndex(0));
+			answer2Loc.setText("Current Loaction: " + currentSlide.getChoiceTitleAtIndex(1));
+			answer3Loc.setText("Current Loaction: " + currentSlide.getChoiceTitleAtIndex(2));
+			answer4Loc.setText("Current Loaction: " + currentSlide.getChoiceTitleAtIndex(3));
+		}else
+		{
+			answer1Loc.setText("Current Loaction: ");
+			answer2Loc.setText("Current Loaction: ");
+			answer3Loc.setText("Current Loaction: ");
+			answer4Loc.setText("Current Loaction: ");
+		}
 	}
 	
 	/**addActionListeners
@@ -247,6 +316,11 @@ public class BuildWindow extends JPanel implements GUIInterface
 		createdGames.addActionListener(new ComboListenerLoad());
 		createNewBuild.addActionListener(new ButtonListener());
 		backToMMenu.addActionListener(new ButtonListener());
+		
+		createdSlidesAnswer1.addActionListener(new ComboListener());
+		createdSlidesAnswer2.addActionListener(new ComboListener());
+		createdSlidesAnswer3.addActionListener(new ComboListener());
+		createdSlidesAnswer4.addActionListener(new ComboListener());
 	}
 
 	/**addGameMenu
@@ -304,36 +378,47 @@ public class BuildWindow extends JPanel implements GUIInterface
 				}
 			}else if(command.equals( "Create New Slide"))
 			{
-				Slide currentSlide = new Slide();
-				currentSlide.setTitle(JOptionPane.showInputDialog(buildFrame,"Set the Title of the Path: "));
+				String title = JOptionPane.showInputDialog(buildFrame,"Set the Title of the Path: ");
+				
+				int result = JOptionPane.showConfirmDialog(buildFrame,"Are you sure you want to leave this window.");
+				if(result == JOptionPane.YES_OPTION)
+				{
+					currentSlide = new Slide();
+					currentSlide.setTitle(title);
+					buildFrame.setTitle(title);
+					
+					createdSlides.addItem(title);
+					createdSlidesAnswer1.addItem(title);
+					createdSlidesAnswer2.addItem(title);
+					createdSlidesAnswer3.addItem(title);
+					createdSlidesAnswer4.addItem(title);
+					
+					currentGame.updateSlide(currentSlide);
+					updateComponents();
+				}
 			}else if(command.equals( "Load Slide"))
 			{
 				
 			}else if(command.equals( "Save Slide"))
 			{
 				currentSlide.setText(storyText.getText());
-				currentGame.addSlide(currentSlide);
-				createdSlides.addItem(currentSlide.getTitle());
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(createdSlidesAnswer1.getSelectedIndex()), answer1Text.getText(), 0);
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(createdSlidesAnswer2.getSelectedIndex()), answer2Text.getText(), 1);
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(createdSlidesAnswer3.getSelectedIndex()), answer3Text.getText(), 2);
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(createdSlidesAnswer4.getSelectedIndex()), answer4Text.getText(), 3);
+				currentGame.updateSlide(currentSlide);
+				JOptionPane.showMessageDialog(buildFrame, "Saved!");
+
+				
 			}else if(command.equals( "Create Game"))
 			{
 				//saveGame here...
-			}else if(command.equals( "Set Event Location For Answer One"))
-			{
-				
-			}else if(command.equals( "Set Event Location For Answer Two"))
-			{
-				
-			}else if(command.equals( "Set Event Location For Answer Three"))
-			{
-				
-			}else if(command.equals( "Set Event Location For Answer Four"))
-			{
-				
 			}else if(command.equals( "Create New Game"))
 			{
 				JOptionPane menuJOP = new JOptionPane();
 				currentGame = new Game();
 				currentSlide = new Slide();
+				currentGame.addSlide(currentSlide);
 				String title = null;
 				do{
 					title = menuJOP.showInputDialog(buildFrame,"Set the Title of the First Path: ");
@@ -345,8 +430,12 @@ public class BuildWindow extends JPanel implements GUIInterface
 					buildMenu.dispose();
 					buildFrame.setVisible(true);
 					currentSlide.setTitle(title);
-					buildFrame.setTitle(title + " Slide");
 					createdSlides.addItem(title);	
+					createdSlidesAnswer1.addItem(title);
+					createdSlidesAnswer2.addItem(title);
+					createdSlidesAnswer3.addItem(title);
+					createdSlidesAnswer4.addItem(title);
+					createdSlides.setActionCommand("CS");
 				}
 			}else if(command.equals("Back To Main Menu"))
 			{
@@ -359,7 +448,40 @@ public class BuildWindow extends JPanel implements GUIInterface
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			//label.setText("location: " + createdSlides.getSelectedIndex()); selected drop box item...
+			String command = event.getActionCommand();
+			
+			if(command == "A1")
+			{
+				answer1Loc.setText("Current Location: " + createdSlidesAnswer1.getSelectedItem());
+				int index = createdSlidesAnswer1.getSelectedIndex();
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(index), answer1Text.getText(), 0);
+			}else if(command == "A2")
+			{
+				answer2Loc.setText("Current Location: " + createdSlidesAnswer2.getSelectedItem());
+				int index = createdSlidesAnswer2.getSelectedIndex();
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(index), answer2Text.getText(), 1);
+			}else if(command == "A3")
+			{
+				answer3Loc.setText("Current Location: " + createdSlidesAnswer3.getSelectedItem());
+				int index = createdSlidesAnswer3.getSelectedIndex();
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(index), answer3Text.getText(), 2);
+			}else if(command == "A4")
+			{
+				answer4Loc.setText("Current Location: " + createdSlidesAnswer4.getSelectedItem());
+				int index = createdSlidesAnswer4.getSelectedIndex();
+				currentSlide.setNextChoice(currentGame.getSlideAtIndex(index), answer4Text.getText(), 3);
+			}else if(command == "CS")
+			{
+				if(createdSlides.getSelectedItem() != "Select One")
+				{
+					int result = JOptionPane.showConfirmDialog(buildFrame,"Are you sure you want to leave this window.");
+					if(result == JOptionPane.YES_OPTION)
+					{
+						currentSlide = currentGame.getSlideAtIndex(createdSlides.getSelectedIndex()-1);
+						updateComponents();
+					}	
+				}
+			}
 		}
 	}
 	private class ComboListenerLoad implements ActionListener
