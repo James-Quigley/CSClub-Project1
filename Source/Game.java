@@ -9,7 +9,8 @@ Description: Game class that holds all of the slide objects in order to organize
 and to have the ability to save the game.
  */
 import java.util.*;
-public class Game{
+import java.io.Serializable;
+public class Game implements Serializable{
 	private String name;
 	private List<Slide> gameSlides;
 
@@ -37,28 +38,6 @@ public class Game{
 
 	public void setGameSlides(List<Slide> slideList){
 		gameSlides = slideList;
-	}
-
-	//Returns -1 if failure to save
-	public int saveGame(String savePath){
-		int success = -1;
-		//Create or open save file
-		//Write all necessary data
-		//Change success flag
-		return success;
-	}
-
-	//Returns -1 if failure to load
-	public int loadGame(String savePath){
-		int success = -1;
-		String gameName = "";
-		List<Slide> slideList = new ArrayList<Slide>();
-		//Open save file
-		//Read all data
-		//Change success flag
-		name = gameName;
-		gameSlides = slideList;
-		return success;
 	}
 
 	//Add slide object to list of slides

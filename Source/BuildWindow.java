@@ -12,15 +12,15 @@ import java.io.*;
 import java.util.*; 
 import java.awt.*;
 
-public class BuildPanel extends JPanel implements GUIInterface
+public class BuildWindow extends JPanel implements GUIInterface
 {
 	private JButton exitToDesk, exitToMenu;
 	private JButton createGame, createNewSlide, createNewBuild;
 	private JButton saveSlide, LoadSlide, backToMMenu;
 	private JButton answer1B, answer2B, answer3B, answer4B;
-	private JComboBox<String> createdEvents, createdGames;
+	private JComboBox<String> createdSlides, createdGames;
 	private JFrame buildFrame, buildMenu;
-	private MenuPanel MainMenu;
+	private MenuWindow MainMenu;
 	private JPanel mainPanel, loadPanel;
 	private JPanel options, ButtonPanel;
 	private JPanel body, DropBoxPanel;
@@ -32,8 +32,10 @@ public class BuildPanel extends JPanel implements GUIInterface
 	private JTextField answer1Loc, answer2Loc, answer3Loc, answer4Loc;
 	private int SCREEN_WIDTH;
 	private int SCREEN_HEIGHT;
+	private Game currentGame;
+	private Slide currentSlide;
 	
-    public BuildPanel(JFrame incBuildFrame, MenuPanel oldMMenu)// constructer
+    public BuildWindow(JFrame incBuildFrame, MenuWindow oldMMenu)// constructer
     {
 		MainMenu = oldMMenu;
 		buildFrame = incBuildFrame;
@@ -64,7 +66,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 		headers.add(exitToDesk);
 		headers.add(exitToMenu);
 		
-		options.add(createdEvents);
+		options.add(createdSlides);
 		options.add(createNewSlide);
 		options.add(LoadSlide);
 		
@@ -131,7 +133,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 		answer3Loc.setEditable(false);
 		answer4Loc.setEditable(false);
 
-		createdEvents.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/35));
+		createdSlides.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/35));
 		createNewSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		LoadSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		createGame.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
@@ -141,6 +143,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 		buildMenu.setPreferredSize(new Dimension(SCREEN_WIDTH/2,SCREEN_HEIGHT/2));
 		buildMenu.setLayout(new FlowLayout());
 		buildMenu.setLocation(SCREEN_WIDTH/4,SCREEN_HEIGHT/4);
+		
 		
 		Message.setLayout(new BoxLayout(Message, BoxLayout.Y_AXIS));
 		
@@ -162,7 +165,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 		
 		buildMenu.setUndecorated(true);
 		buildMenu.getRootPane().setWindowDecorationStyle(JRootPane.FILE_CHOOSER_DIALOG );
-		buildMenu.setDefaultCloseOperation(buildMenu.DO_NOTHING_ON_CLOSE);
+		buildMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 	
@@ -173,7 +176,6 @@ public class BuildPanel extends JPanel implements GUIInterface
 	**/
 	public void createComponents()
 	{
-		String [] events = {"Slide Menu", "Slide One", "Slide Three"};// need to load Slides here...
 		String [] Games = {"Game One", "Game Two", "Game Three"};// need to load saved game names here...
 		
 		mainPanel = new JPanel();
@@ -203,7 +205,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 		exitToDesk = new JButton("Exit To Desktop");
 		exitToMenu = new JButton("Exit To Menu");
 		
-		createdEvents = new JComboBox<String>(events);
+		createdSlides = new JComboBox<String>();
 		LoadSlide = new JButton("Load Slide");
 		createNewSlide = new JButton("Create New Slide");
 		
@@ -238,7 +240,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 		exitToDesk.addActionListener(new ButtonListener());
 		exitToMenu.addActionListener(new ButtonListener());
 		
-		createdEvents.addActionListener(new ComboListener());
+		createdSlides.addActionListener(new ComboListener());
 		LoadSlide.addActionListener(new ButtonListener());
 		createNewSlide.addActionListener(new ButtonListener());
 		
@@ -298,20 +300,23 @@ public class BuildPanel extends JPanel implements GUIInterface
 				int result = JOptionPane.showConfirmDialog(buildFrame, "Are you sure you want to exit to Main Menu?");
 				if (result == JOptionPane.YES_OPTION){
 					buildFrame.dispose();
-					MainMenu.setVisible(false);
+					MainMenu.setVisible(true);
 				}
 			}else if(command.equals( "Create New Slide"))
 			{
-				
+				Slide currentSlide = new Slide();
+				currentSlide.setTitle(JOptionPane.showInputDialog(buildFrame,"Set the Title of the Path: "));
 			}else if(command.equals( "Load Slide"))
 			{
 				
 			}else if(command.equals( "Save Slide"))
 			{
-				
+				currentSlide.setText(storyText.getText());
+				currentGame.addSlide(currentSlide);
+				createdSlides.addItem(currentSlide.getTitle());
 			}else if(command.equals( "Create Game"))
 			{
-				
+				//saveGame here...
 			}else if(command.equals( "Set Event Location For Answer One"))
 			{
 				
@@ -326,10 +331,23 @@ public class BuildPanel extends JPanel implements GUIInterface
 				
 			}else if(command.equals( "Create New Game"))
 			{
-				//create new Game Object.
-				//set Title.
-				buildMenu.dispose();
-				buildFrame.setVisible(true);
+				JOptionPane menuJOP = new JOptionPane();
+				currentGame = new Game();
+				currentSlide = new Slide();
+				String title = null;
+				do{
+					title = menuJOP.showInputDialog(buildFrame,"Set the Title of the First Path: ");
+					
+				}while(title != null && title.compareTo("") == 0);
+				
+				if(title != null)
+				{
+					buildMenu.dispose();
+					buildFrame.setVisible(true);
+					currentSlide.setTitle(title);
+					buildFrame.setTitle(title + " Slide");
+					createdSlides.addItem(title);	
+				}
 			}else if(command.equals("Back To Main Menu"))
 			{
 				buildMenu.dispose();
@@ -341,7 +359,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			//label.setText("location: " + createdEvents.getSelectedIndex()); selected drop box item...
+			//label.setText("location: " + createdSlides.getSelectedIndex()); selected drop box item...
 		}
 	}
 	private class ComboListenerLoad implements ActionListener
