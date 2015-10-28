@@ -29,7 +29,7 @@ public class BuildWindow extends JPanel implements GUIInterface
 	private JPanel headers, CreatePanel;
 	private JPanel answers, MenuPanel;
 	private JLabel Message;
-	private JTextField storyText;
+	private JTextArea storyText;
 	private JTextField answer1Text, answer2Text, answer3Text, answer4Text;
 	private JTextField answer1Loc, answer2Loc, answer3Loc, answer4Loc;
 	private int SCREEN_WIDTH;
@@ -130,10 +130,7 @@ public class BuildWindow extends JPanel implements GUIInterface
 		
 		answers.setLayout(new GridLayout(5, 2, 5, 5));
 		
-		body.setSize(SCREEN_WIDTH-500,SCREEN_HEIGHT-500);
 		answers.setPreferredSize(new Dimension(SCREEN_WIDTH/2, SCREEN_HEIGHT/6));
-		
-		storyText.setMaximumSize(new Dimension(SCREEN_WIDTH-500,SCREEN_HEIGHT-500));
 		
 		answer1Text.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
 		answer2Text.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
@@ -190,6 +187,10 @@ public class BuildWindow extends JPanel implements GUIInterface
 		createdSlidesAnswer3.setActionCommand("A3");
 		createdSlidesAnswer4.setActionCommand("A4");
 		
+        body.setMaximumSize(new Dimension(SCREEN_WIDTH-500,SCREEN_HEIGHT-500));
+        storyText.setMaximumSize(new Dimension(SCREEN_WIDTH-500,SCREEN_HEIGHT-500));
+        storyText.setLineWrap(true);
+        
 		createdSlides.addItem("Select One");
 	}
 	
@@ -211,14 +212,14 @@ public class BuildWindow extends JPanel implements GUIInterface
 		
 		if(currentSlide.getChoiceTextAtIndex(1) != null)
 		{
-			storyText = new JTextField(currentSlide.getText(),15);
+			storyText = new JTextArea(currentSlide.getText());
 			answer1Text = new JTextField(currentSlide.getChoiceTextAtIndex(0));
 			answer2Text = new JTextField(currentSlide.getChoiceTextAtIndex(1));
 			answer3Text = new JTextField(currentSlide.getChoiceTextAtIndex(2));
 			answer4Text = new JTextField(currentSlide.getChoiceTextAtIndex(3));
 		}else
 		{
-			storyText = new JTextField("", 15);
+			storyText = new JTextArea();
 			answer1Text = new JTextField();
 			answer2Text = new JTextField();
 			answer3Text = new JTextField();
