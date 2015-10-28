@@ -408,12 +408,24 @@ public class BuildWindow extends JPanel implements GUIInterface
 				currentSlide.setNextChoice(currentGame.getSlideAtIndex(createdSlidesAnswer3.getSelectedIndex()), answer3Text.getText(), 2);
 				currentSlide.setNextChoice(currentGame.getSlideAtIndex(createdSlidesAnswer4.getSelectedIndex()), answer4Text.getText(), 3);
 				currentGame.updateSlide(currentSlide);
-				JOptionPane.showMessageDialog(buildFrame, "Saved!");
-
-				
+				JOptionPane.showMessageDialog(buildFrame, "Saved!");			
 			}else if(command.equals( "Create Game"))
 			{
-				//saveGame here...
+				System.out.println("Saving");
+				LSGame save = new LSGame();
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+ 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+ 
+				int userSelection = fileChooser.showSaveDialog(parentFrame);
+ 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+   					File fileToSave = fileChooser.getSelectedFile();
+    				fileToSave.getAbsolutePath()
+       				save.saveGame(currentGame, fileToSave.getAbsolutePath());
+    			}
 			}else if(command.equals( "Create New Game"))
 			{
 				JOptionPane menuJOP = new JOptionPane();
