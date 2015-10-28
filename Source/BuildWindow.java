@@ -211,14 +211,14 @@ public class BuildWindow extends JPanel implements GUIInterface
 		
 		if(currentSlide.getChoiceTextAtIndex(1) != null)
 		{
-			storyText = new JTextField(currentSlide.getText());
+			storyText = new JTextField(currentSlide.getText(),15);
 			answer1Text = new JTextField(currentSlide.getChoiceTextAtIndex(0));
 			answer2Text = new JTextField(currentSlide.getChoiceTextAtIndex(1));
 			answer3Text = new JTextField(currentSlide.getChoiceTextAtIndex(2));
 			answer4Text = new JTextField(currentSlide.getChoiceTextAtIndex(3));
 		}else
 		{
-			storyText = new JTextField();
+			storyText = new JTextField("", 15);
 			answer1Text = new JTextField();
 			answer2Text = new JTextField();
 			answer3Text = new JTextField();
