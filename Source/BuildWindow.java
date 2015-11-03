@@ -420,12 +420,17 @@ public class BuildWindow extends JPanel implements GUIInterface
 				fileChooser.setDialogTitle("Specify a file to save");   
  
 				int userSelection = fileChooser.showSaveDialog(parentFrame);
- 
-				if (userSelection == JFileChooser.APPROVE_OPTION) {
+                try
+                {
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
    					File fileToSave = fileChooser.getSelectedFile();
-    				fileToSave.getAbsolutePath()
+    				fileToSave.getAbsolutePath();
        				save.saveGame(currentGame, fileToSave.getAbsolutePath());
-    			}
+                    }
+                }catch(IOException e )
+                {
+                    System.out.println("Io");
+                }
 			}else if(command.equals( "Create New Game"))
 			{
 				JOptionPane menuJOP = new JOptionPane();
